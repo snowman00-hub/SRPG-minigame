@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// 나중에 Tile엔 MonoBehaviour 제거하기
 public class Tile : MonoBehaviour
 {
     private Vector2Int gridPosition;
