@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
@@ -13,16 +13,17 @@ public class Tile : MonoBehaviour
         this.gridPosition = gridPosition;
         this.height = height;
     }
-
+    
 #if UNITY_EDITOR
-    //private void OnDrawGizmos()
-    //{
-    //    UnityEditor.Handles.Label(
-    //        transform.position + Vector3.up * 1.0f,
-    //        $"{gridPosition}\nH:{height}"
-    //    );
-    //}
+    private void OnDrawGizmos()
+    {
+        UnityEditor.Handles.Label(
+            transform.position + Vector3.up * 1.0f,
+            $"{gridPosition}\nH:{height}"
+        );
+    }
 
+    // 인스펙터 값 변경 시, 씬 저장 시, 컴파일 시 호출
     private void OnValidate()
     {
         transform.position = new Vector3(
