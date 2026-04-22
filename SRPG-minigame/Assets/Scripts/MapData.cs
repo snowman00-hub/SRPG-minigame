@@ -1,5 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
+
+[System.Serializable]
+public class EnemyPlacement
+{
+    public int x, z;
+    public string enemyID; // 프리팹 이름이나 ID
+}
 
 [CreateAssetMenu(fileName = "NewMapData", menuName = "SRPG/Map Data")]
 public class MapData : ScriptableObject
@@ -12,6 +19,10 @@ public class MapData : ScriptableObject
     
     // 타일별 이동 가능 여부
     public bool[] walkables;
+
+    [Header("Spawn Data")]
+    public List<EnemyPlacement> enemies = new List<EnemyPlacement>();
+    public List<Vector2Int> playerSpawnPoints = new List<Vector2Int>();
 
     // 데이터를 초기화합니다.
     public void Initialize(int w, int h)
@@ -45,15 +56,4 @@ public class MapData : ScriptableObject
         }
         return 0;
     }
-
-    [System.Serializable]
-    public class EnemyPlacement
-    {
-        public int x, z;
-        public string enemyID; // 프리팹 이름이나 ID
-    }
-
-    [Header("Spawn Data")]
-    public List<EnemyPlacement> enemies = new List<EnemyPlacement>();
-    public List<Vector2Int> playerSpawnPoints = new List<Vector2Int>();
 }

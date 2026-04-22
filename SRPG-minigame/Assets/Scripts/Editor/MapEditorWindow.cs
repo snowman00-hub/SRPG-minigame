@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
+
+// 에디터 작업 모드
+public enum EditMode { Height, Enemy, PlayerSpawn }
 
 public class MapEditorWindow : EditorWindow
 {
-    private enum EditMode { Height, Enemy, PlayerSpawn }
     private EditMode currentMode = EditMode.Height;
-
     private int paintHeight = 1;
+    private int selectedEnemyIndex = 0; // 선택된 적군 인덱스
     private string enemyID = "Enemy_Slime";
     private Vector2 scrollPos;
     private Map targetMap;
@@ -33,7 +36,12 @@ public class MapEditorWindow : EditorWindow
             return;
         }
 
-        // 2. 설정 영역
+        if (targetMap.Tiles == null)
+        {
+            targetMap.RebuildTilesArray();
+        }
+
+        // 설정 영역
         EditorGUILayout.BeginVertical("box");
         targetMap = (Map)EditorGUILayout.ObjectField("Target Map", targetMap, typeof(Map), true);
         
@@ -46,19 +54,56 @@ public class MapEditorWindow : EditorWindow
         }
         else if (currentMode == EditMode.Enemy)
         {
-            enemyID = EditorGUILayout.TextField("Enemy ID/Prefab Name", enemyID);
+            if (targetMap.unitPrefabs != null && targetMap.unitPrefabs.Count > 0)
+            {
+                string[] options = new string[targetMap.unitPrefabs.Count];
+                for (int i = 0; i < targetMap.unitPrefabs.Count; i++)
+                {
+                    options[i] = targetMap.unitPrefabs[i] != null ? targetMap.unitPrefabs[i].name : "Empty Slot";
+                }
+                
+                selectedEnemyIndex = EditorGUILayout.Popup("Select Enemy", selectedEnemyIndex, options);
+                
+                if (selectedEnemyIndex >= 0 && selectedEnemyIndex < options.Length)
+                {
+                    enemyID = options[selectedEnemyIndex];
+                    
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField("Current Prefab:", GUILayout.Width(100));
+                    EditorGUILayout.ObjectField(targetMap.unitPrefabs[selectedEnemyIndex], typeof(GameObject), false);
+                    EditorGUILayout.EndHorizontal();
+                }
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("Map 컴포넌트의 'Unit Prefabs' 리스트에 프리팹을 먼저 등록해주세요.", MessageType.Warning);
+            }
         }
+
+        EditorGUILayout.HelpBox("좌클릭: 배치/변경 | 우클릭: 삭제/초기화", MessageType.Info);
+        
+        EditorGUILayout.Space(5);
+        // Generate Map 버튼을 더 잘 보이게 추가
+        GUI.backgroundColor = new Color(0.7f, 1f, 0.7f); // 연한 녹색
+        if (GUILayout.Button("Generate Map (Rebuild Scene)", GUILayout.Height(30)))
+        {
+            targetMap.GenerateMap();
+        }
+        GUI.backgroundColor = Color.white;
+        
         EditorGUILayout.EndVertical();
 
         EditorGUILayout.Space(10);
 
-        // 3. 그리드 그리기 영역
+        // 그리드 그리기 영역
         DrawGrid();
         
         EditorGUILayout.Space(10);
-        if (GUILayout.Button("Refresh Map Data"))
+        // 하단에도 유지 (스크롤이 길어질 경우 대비)
+        if (GUILayout.Button("Save Data & Refresh"))
         {
-            targetMap.GenerateMap(); // 필요시 맵 재생성
+            targetMap.SaveToData();
+            targetMap.GenerateMap();
         }
     }
 
@@ -67,10 +112,8 @@ public class MapEditorWindow : EditorWindow
         int w = targetMap.horizontalSize;
         int h = targetMap.verticalSize;
 
-        // 스크롤 뷰 시작
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
         
-        // 상단 X 좌표 표시
         EditorGUILayout.BeginHorizontal();
         GUILayout.Space(30);
         for (int x = 0; x < w; x++)
@@ -79,12 +122,9 @@ public class MapEditorWindow : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
 
-        // 그리드 본체 (Z축은 위에서 아래로)
         for (int z = h - 1; z >= 0; z--)
         {
             EditorGUILayout.BeginHorizontal();
-            
-            // 좌측 Z 좌표 표시
             EditorGUILayout.LabelField("Z" + z, EditorStyles.centeredGreyMiniLabel, GUILayout.Width(25));
 
             for (int x = 0; x < w; x++)
@@ -102,7 +142,6 @@ public class MapEditorWindow : EditorWindow
                     if (currentH < 0) cellColor = new Color(1f, 0.5f, 0.5f);
                 }
 
-                // 정보 표시용 라벨 (P: 아군 스폰, E: 적군 고정배치)
                 string label = tile != null ? currentH.ToString() : "N/A";
                 if (targetMap.mapData != null)
                 {
@@ -114,10 +153,24 @@ public class MapEditorWindow : EditorWindow
 
                 GUI.backgroundColor = cellColor;
 
-                if (GUILayout.Button(label, GUILayout.Width(45), GUILayout.Height(45)))
+                Rect rect = GUILayoutUtility.GetRect(new GUIContent(label), GUI.skin.button, GUILayout.Width(45), GUILayout.Height(45));
+                
+                Event e = Event.current;
+                if ((e.type == EventType.MouseDown || e.type == EventType.MouseDrag) && rect.Contains(e.mousePosition))
                 {
-                    HandleCellClick(x, z, tile);
+                    if (e.button == 0) // 좌클릭
+                    {
+                        HandleCellClick(x, z, tile, 0);
+                        e.Use();
+                    }
+                    else if (e.button == 1) // 우클릭
+                    {
+                        HandleCellClick(x, z, tile, 1);
+                        e.Use();
+                    }
                 }
+
+                GUI.Box(rect, label, GUI.skin.button);
             }
             
             GUI.backgroundColor = Color.white;
@@ -127,38 +180,54 @@ public class MapEditorWindow : EditorWindow
         EditorGUILayout.EndScrollView();
     }
 
-    private void HandleCellClick(int x, int z, Tile tile)
+    private void HandleCellClick(int x, int z, Tile tile, int mouseButton)
     {
         if (targetMap.mapData == null) return;
 
         Undo.RecordObject(targetMap.mapData, "Map Editor Change");
 
-        switch (currentMode)
+        if (mouseButton == 1)
         {
-            case EditMode.Height:
-                if (tile != null)
-                {
-                    Undo.RecordObject(tile, "Update Height");
-                    tile.SetHeightValue(paintHeight);
-                    targetMap.mapData.SetHeight(x, z, paintHeight);
-                }
-                break;
+            targetMap.mapData.enemies.RemoveAll(e => e.x == x && e.z == z);
+            targetMap.mapData.playerSpawnPoints.Remove(new Vector2Int(x, z));
+            if (tile != null)
+            {
+                Undo.RecordObject(tile, "Reset Height");
+                tile.SetHeightValue(0);
+                targetMap.mapData.SetHeight(x, z, 0);
+            }
+        }
+        else
+        {
+            switch (currentMode)
+            {
+                case EditMode.Height:
+                    if (tile != null)
+                    {
+                        Undo.RecordObject(tile, "Update Height");
+                        tile.SetHeightValue(paintHeight);
+                        targetMap.mapData.SetHeight(x, z, paintHeight);
+                    }
+                    break;
 
-            case EditMode.Enemy:
-                targetMap.mapData.enemies.RemoveAll(e => e.x == x && e.z == z);
-                targetMap.mapData.enemies.Add(new MapData.EnemyPlacement { x = x, z = z, enemyID = enemyID });
-                break;
+                case EditMode.Enemy:
+                    targetMap.mapData.enemies.RemoveAll(e => e.x == x && e.z == z);
+                    targetMap.mapData.enemies.Add(new EnemyPlacement { x = x, z = z, enemyID = enemyID });
+                    break;
 
-            case EditMode.PlayerSpawn:
-                Vector2Int pos = new Vector2Int(x, z);
-                if (targetMap.mapData.playerSpawnPoints.Contains(pos))
-                    targetMap.mapData.playerSpawnPoints.Remove(pos);
-                else
-                    targetMap.mapData.playerSpawnPoints.Add(pos);
-                break;
+                case EditMode.PlayerSpawn:
+                    Vector2Int pos = new Vector2Int(x, z);
+                    if (!targetMap.mapData.playerSpawnPoints.Contains(pos))
+                        targetMap.mapData.playerSpawnPoints.Add(pos);
+                    break;
+            }
         }
 
         EditorUtility.SetDirty(targetMap.mapData);
-        if (tile != null) EditorUtility.SetDirty(tile);
+        if (tile != null) 
+        {
+            EditorUtility.SetDirty(tile);
+            SceneView.RepaintAll();
+        }
     }
 }
