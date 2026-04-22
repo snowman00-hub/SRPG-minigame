@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1308584441961578382}
   - component: {fileID: 658771449938269946}
   - component: {fileID: 8032929965531755984}
+  - component: {fileID: 2397190912966520047}
   m_Layer: 0
   m_Name: Tile_Prototype
   m_TagString: Untagged
@@ -90,3 +91,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2397190912966520047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8629853889809491829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9104fa65f3a5c6b4f97ffa3e49a6d198, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tile
+  x: 0
+  z: 0
+  height: 0
+  isWalkable: 1
