@@ -8,6 +8,7 @@ public class Unit : MonoBehaviour
     public string unitName;
     public Team team;
     public UnitData unitData;
+    public GlobalStatSettings globalSettings;
 
     [Header("Stats")]
     public int startingLevel = 1;
@@ -30,7 +31,11 @@ public class Unit : MonoBehaviour
         unitData = data;
         unitName = data.unitName;
         if (stats == null) stats = new UnitStats();
-        stats.Initialize(data, level);
+        
+        // 만약 globalSettings가 할당되지 않았다면 Resources에서 찾아봄
+        if (globalSettings == null) globalSettings = GlobalStatSettings.Instance;
+        
+        stats.Initialize(data, globalSettings, level);
     }
     
     [Header("Grid Position")]

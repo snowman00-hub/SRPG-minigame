@@ -12,6 +12,9 @@ public class UnitStats
     
     public int attack;
     public int defense;
+    public int speed;
+    public int magicAttack;
+    public int magicDefense;
     public int moveRange;
     public int jumpHeight;
     public int atkRange;
@@ -24,39 +27,46 @@ public class UnitStats
     public float evasion;
 
     private UnitData data;
+    private GlobalStatSettings global;
 
-    public void Initialize(UnitData unitData, int startLevel = 1)
+    public void Initialize(UnitData unitData, GlobalStatSettings globalSettings, int startLevel = 1)
     {
         data = unitData;
-        
-        // 레벨이 1인 경우에만 초기화 (새 유닛 생성 시)
-        // 만약 기존 레벨을 유지하고 싶다면 레벨 설정 로직을 분리해야 함
+        global = globalSettings;
         level = startLevel;
         
-        // 경험치 통 계산 (레벨에 비례)
+        // 경험치 통 계산
         maxEXP = 100;
         for (int i = 1; i < level; i++)
         {
             maxEXP = (int)(maxEXP * 1.2f);
         }
 
-        // 기본 스탯 + (성장치 * (레벨 - 1))
-        maxHP = data.baseMaxHP + (data.hpGrowth * (level - 1));
+        RecalculateStats();
         currentHP = maxHP;
-        
-        attack = data.baseAttack + (data.attackGrowth * (level - 1));
-        defense = data.baseDefense + (data.defenseGrowth * (level - 1));
-        
-        moveRange = data.baseMoveRange + (data.moveRangeGrowth * (level - 1));
-        jumpHeight = data.baseJumpHeight; // 점프 높이는 성장치 없음 (기획 참고)
-        atkRange = data.baseAtkRange + (data.atkRangeGrowth * (level - 1));
-        
-        maxEnergy = data.baseMaxEnergy;
         currentEnergy = maxEnergy;
+    }
 
-        critRate = data.baseCritRate + (data.critGrowth * (level - 1));
-        accuracy = data.baseAccuracy + (data.accuracyGrowth * (level - 1));
-        evasion = data.baseEvasion + (data.evasionGrowth * (level - 1));
+    public void RecalculateStats()
+    {
+        if (data == null || global == null) return;
+
+        // 최종 스탯 = (글로벌 표준 * 유닛 계수) + (글로벌 성장 * 유닛 성장 계수 * (레벨 - 1))
+        maxHP = Mathf.RoundToInt((global.stdMaxHP * data.hpRatio) + (global.stdHPGrowth * data.hpGrowthRatio * (level - 1)));
+        attack = Mathf.RoundToInt((global.stdAttack * data.atkRatio) + (global.stdAttackGrowth * data.atkGrowthRatio * (level - 1)));
+        defense = Mathf.RoundToInt((global.stdDefense * data.defRatio) + (global.stdDefenseGrowth * data.defGrowthRatio * (level - 1)));
+        speed = Mathf.RoundToInt((global.stdSpeed * data.spdRatio) + (global.stdSpeedGrowth * data.spdGrowthRatio * (level - 1)));
+        magicAttack = Mathf.RoundToInt((global.stdMagicAttack * data.matkRatio) + (global.stdMagicAttackGrowth * data.matkGrowthRatio * (level - 1)));
+        magicDefense = Mathf.RoundToInt((global.stdMagicDefense * data.mdefRatio) + (global.stdMagicDefenseGrowth * data.mdefGrowthRatio * (level - 1)));
+
+        moveRange = data.moveRange;
+        jumpHeight = data.jumpHeight;
+        atkRange = data.atkRange;
+        maxEnergy = data.maxEnergy;
+
+        critRate = data.baseCritRate;
+        accuracy = data.baseAccuracy;
+        evasion = data.baseEvasion;
     }
 
     public void GainExperience(int amount)
@@ -72,21 +82,13 @@ public class UnitStats
     {
         currentEXP -= maxEXP;
         level++;
-        maxEXP = (int)(maxEXP * 1.2f); // 레벨업 필요 경험치 증가 예시
-
-        // 성장치 반영
-        maxHP += data.hpGrowth;
-        currentHP += data.hpGrowth; // 레벨업 시 현재 체력도 증가 (기획에 따라 변경 가능)
+        maxEXP = (int)(maxEXP * 1.2f);
         
-        attack += data.attackGrowth;
-        defense += data.defenseGrowth;
+        int oldMaxHP = maxHP;
+        RecalculateStats();
         
-        critRate += data.critGrowth;
-        accuracy += data.accuracyGrowth;
-        evasion += data.evasionGrowth;
-
-        moveRange += data.moveRangeGrowth;
-        atkRange += data.atkRangeGrowth;
+        // 레벨업 시 늘어난 최대 체력만큼 현재 체력도 보정
+        currentHP += (maxHP - oldMaxHP);
 
         Debug.Log($"{data.unitName} Level Up! Now Level {level}");
     }
