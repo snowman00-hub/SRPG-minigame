@@ -7,9 +7,31 @@ public class Unit : MonoBehaviour
     [Header("Unit Info")]
     public string unitName;
     public Team team;
-    
+    public UnitData unitData;
+
     [Header("Stats")]
-    public int moveRange = 3;
+    public int startingLevel = 1;
+    public UnitStats stats;
+    
+    [Header("Status")]
+    public bool hasMoved;
+    public bool hasActed;
+
+    private void Start()
+    {
+        if (unitData != null && (stats == null || stats.level <= 1))
+        {
+            Initialize(unitData, startingLevel);
+        }
+    }
+
+    public void Initialize(UnitData data, int level = 1)
+    {
+        unitData = data;
+        unitName = data.unitName;
+        if (stats == null) stats = new UnitStats();
+        stats.Initialize(data, level);
+    }
     
     [Header("Grid Position")]
     public int x;
@@ -34,5 +56,19 @@ public class Unit : MonoBehaviour
     public void UpdateVisualPosition(Map map)
     {
         SetPosition(x, z, map);
+    }
+
+    public void OnTurnStart()
+    {
+        hasMoved = false;
+        hasActed = false;
+        stats.RestoreEnergy();
+    }
+
+    // 세이브 데이터를 유닛에 적용합니다.
+    public void ApplySaveData(UnitSaveData data, UnitData scriptableObject)
+    {
+        Initialize(scriptableObject, data.level);
+        stats.currentEXP = data.currentEXP;
     }
 }
