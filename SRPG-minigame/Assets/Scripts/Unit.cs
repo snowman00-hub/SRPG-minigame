@@ -4,19 +4,18 @@ public enum Team { Player, Enemy }
 
 public class Unit : MonoBehaviour
 {
-    [Header("Unit Info")]
-    public string unitName;
+    [Header("Unit Settings")]
+    [HideInInspector] public string unitName;
     public Team team;
     public UnitData unitData;
-    public GlobalStatSettings globalSettings;
-
-    [Header("Stats")]
     public int startingLevel = 1;
-    public UnitStats stats;
-    
-    [Header("Status")]
-    public bool hasMoved;
-    public bool hasActed;
+
+    [HideInInspector] public GlobalStatSettings globalSettings;
+    [HideInInspector] public UnitStats stats;
+    [HideInInspector] public bool hasMoved;
+    [HideInInspector] public bool hasActed;
+
+    private GameObject currentModel;
 
     private void Start()
     {
@@ -32,10 +31,32 @@ public class Unit : MonoBehaviour
         unitName = data.unitName;
         if (stats == null) stats = new UnitStats();
         
+        // 비주얼 모델 생성
+        UpdateVisual();
+
         // 만약 globalSettings가 할당되지 않았다면 Resources에서 찾아봄
         if (globalSettings == null) globalSettings = GlobalStatSettings.Instance;
         
         stats.Initialize(data, globalSettings, level);
+    }
+
+    public void UpdateVisual()
+    {
+        // 기존 모델이 있다면 삭제
+        if (currentModel != null)
+        {
+            if (Application.isPlaying) Destroy(currentModel);
+            else DestroyImmediate(currentModel);
+        }
+
+        // 새로운 모델 소환
+        if (unitData != null && unitData.unitPrefab != null)
+        {
+            currentModel = Instantiate(unitData.unitPrefab, transform);
+            currentModel.transform.localPosition = Vector3.zero;
+            currentModel.transform.localRotation = Quaternion.identity;
+            currentModel.name = "Model_" + unitData.unitName;
+        }
     }
     
     [Header("Grid Position")]

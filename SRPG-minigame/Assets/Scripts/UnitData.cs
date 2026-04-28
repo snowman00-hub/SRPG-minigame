@@ -6,6 +6,8 @@ public class UnitData : ScriptableObject
     [Header("Basic Information")]
     public string unitName;
     public string description;
+    public Sprite unitIcon;
+    public Sprite unitPortrait;
     public GameObject unitPrefab;
 
     [Header("Stat Multipliers (1.0 = 100%)")]

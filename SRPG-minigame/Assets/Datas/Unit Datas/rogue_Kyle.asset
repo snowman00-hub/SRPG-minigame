@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ed5cdc6b37d0c943847df5d7edf50e1, type: 3}
-  m_Name: spearman_baron
+  m_Name: rogue_Kyle
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
-  unitName: "\uBC14\uB860"
+  unitName: "\uCE74\uC77C"
   description: 
-  unitPrefab: {fileID: 0}
+  unitIcon: {fileID: 21300000, guid: 9cb4cce2f76e50c4fb90d0d252de38be, type: 2}
+  unitPortrait: {fileID: 21300000, guid: 64cfb5dd68f60894a8914e1ef008d9d8, type: 2}
+  unitPrefab: {fileID: 9149739273710752754, guid: 95fa489bf4f90f5498ede066b17bcc52, type: 3}
   hpRatio: 0.8
   atkRatio: 0.8
   defRatio: 1

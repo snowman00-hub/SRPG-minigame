@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2949054102773874171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1547605225207726409}
+  - component: {fileID: 8363139949532310886}
+  m_Layer: 0
+  m_Name: Character_Base
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1547605225207726409
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2949054102773874171}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8363139949532310886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2949054102773874171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f096a3d3fc71ca94e88c3dbb3fe2218b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Unit
+  unitName: Test
+  team: 0
+  unitData: {fileID: 11400000, guid: d96d16f5e73716b4988181c95069bce1, type: 2}
+  startingLevel: 1
+  globalSettings: {fileID: 11400000, guid: 42f470b6eab716e469a6580faedcca4f, type: 2}
+  stats:
+    level: 1
+    currentEXP: 0
+    maxEXP: 100
+    currentHP: 0
+    maxHP: 0
+    attack: 0
+    defense: 0
+    speed: 0
+    magicAttack: 0
+    magicDefense: 0
+    moveRange: 0
+    jumpHeight: 0
+    atkRange: 0
+    currentEnergy: 0
+    maxEnergy: 0
+    critRate: 0
+    accuracy: 0
+    evasion: 0
+  hasMoved: 0
+  hasActed: 0
+  x: 0
+  z: 0

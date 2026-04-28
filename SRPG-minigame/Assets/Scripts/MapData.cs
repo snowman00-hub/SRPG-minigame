@@ -21,6 +21,7 @@ public class MapData : ScriptableObject
     public bool[] walkables;
 
     [Header("Spawn Data")]
+    public int maxDeployableUnits = 5; // 최대 출전 인수
     public List<EnemyPlacement> enemies = new List<EnemyPlacement>();
     public List<Vector2Int> playerSpawnPoints = new List<Vector2Int>();
 

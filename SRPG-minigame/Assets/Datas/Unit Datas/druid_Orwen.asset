@@ -10,27 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ed5cdc6b37d0c943847df5d7edf50e1, type: 3}
-  m_Name: archer_iris
+  m_Name: druid_Orwen
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
-  unitName: "\uC774\uB9AC\uC2A4"
+  unitName: "\uC624\uB974\uC6EC"
   description: 
-  unitPrefab: {fileID: 0}
-  hpRatio: 0.6
-  atkRatio: 1.2
-  defRatio: 0.5
+  unitIcon: {fileID: 21300000, guid: 297ad002b94b0454494ce3dc3a0129ef, type: 2}
+  unitPortrait: {fileID: 21300000, guid: 652a8667ad0eb754bb3a3b192a7b836b, type: 2}
+  unitPrefab: {fileID: 5645191583610121038, guid: cbe5977b6c7079b45a3fb2745af272cc, type: 3}
+  hpRatio: 0.7
+  atkRatio: 1
+  defRatio: 0.7
   spdRatio: 1
-  matkRatio: 1
+  matkRatio: 2
   mdefRatio: 1
   hpGrowthRatio: 0.8
-  atkGrowthRatio: 1.2
-  defGrowthRatio: 0.5
+  atkGrowthRatio: 1
+  defGrowthRatio: 0.7
   spdGrowthRatio: 1
-  matkGrowthRatio: 1
+  matkGrowthRatio: 2
   mdefGrowthRatio: 1
-  moveRange: 3
+  moveRange: 4
   jumpHeight: 1
-  atkRange: 3
+  atkRange: 1
   maxEnergy: 3
-  baseCritRate: 10
+  baseCritRate: 0
   baseAccuracy: 90
-  baseEvasion: 10
+  baseEvasion: 2

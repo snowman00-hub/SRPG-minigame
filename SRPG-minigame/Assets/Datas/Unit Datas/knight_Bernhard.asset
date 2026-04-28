@@ -10,27 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ed5cdc6b37d0c943847df5d7edf50e1, type: 3}
-  m_Name: mage_victor
+  m_Name: knight_Bernhard
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
-  unitName: "\uBE45\uD1A0\uB974"
+  unitName: "\uBCA0\uB978\uD558\uB974\uD2B8"
   description: 
-  unitPrefab: {fileID: 0}
-  hpRatio: 0.7
-  atkRatio: 1
-  defRatio: 0.7
+  unitIcon: {fileID: 21300000, guid: ee9b9d5862bbf2e4ba9fbe681d871003, type: 2}
+  unitPortrait: {fileID: 21300000, guid: c79b1167006cfc648a1037f23d1a1c11, type: 2}
+  unitPrefab: {fileID: 5602126192124379035, guid: 5415f42b89092ca4c969e72393fcadff, type: 3}
+  hpRatio: 1.2
+  atkRatio: 1.2
+  defRatio: 1.2
   spdRatio: 1
-  matkRatio: 2
+  matkRatio: 1
   mdefRatio: 1
-  hpGrowthRatio: 0.8
-  atkGrowthRatio: 1
-  defGrowthRatio: 0.7
+  hpGrowthRatio: 1.2
+  atkGrowthRatio: 1.5
+  defGrowthRatio: 1
   spdGrowthRatio: 1
-  matkGrowthRatio: 2
+  matkGrowthRatio: 1
   mdefGrowthRatio: 1
   moveRange: 3
   jumpHeight: 1
   atkRange: 1
   maxEnergy: 3
-  baseCritRate: 0
+  baseCritRate: 10
   baseAccuracy: 90
-  baseEvasion: 2
+  baseEvasion: 7

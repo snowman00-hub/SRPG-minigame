@@ -10,27 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ed5cdc6b37d0c943847df5d7edf50e1, type: 3}
-  m_Name: warrior_leon
+  m_Name: ranger_Nigel
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
-  unitName: "\uB808\uC628"
+  unitName: "\uB098\uC774\uC824"
   description: 
-  unitPrefab: {fileID: 0}
-  hpRatio: 1.2
+  unitIcon: {fileID: 21300000, guid: 55a5211a65e26904ebf703a8fc11c6e0, type: 2}
+  unitPortrait: {fileID: 21300000, guid: 4eb359056e2dbf54f8a663c8a06038ef, type: 2}
+  unitPrefab: {fileID: 6301402535756702000, guid: 28003362280dd2e49ad7c0efdeffa72c, type: 3}
+  hpRatio: 0.6
   atkRatio: 1.2
-  defRatio: 1.2
+  defRatio: 0.5
   spdRatio: 1
   matkRatio: 1
   mdefRatio: 1
-  hpGrowthRatio: 1.2
-  atkGrowthRatio: 1.5
-  defGrowthRatio: 1
+  hpGrowthRatio: 0.8
+  atkGrowthRatio: 1.2
+  defGrowthRatio: 0.5
   spdGrowthRatio: 1
   matkGrowthRatio: 1
   mdefGrowthRatio: 1
   moveRange: 3
   jumpHeight: 1
-  atkRange: 1
+  atkRange: 3
   maxEnergy: 3
   baseCritRate: 10
   baseAccuracy: 90
-  baseEvasion: 7
+  baseEvasion: 10

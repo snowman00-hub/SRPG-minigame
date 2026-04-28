@@ -45,6 +45,18 @@ public class MapEditorWindow : EditorWindow
         EditorGUILayout.BeginVertical("box");
         targetMap = (Map)EditorGUILayout.ObjectField("Target Map", targetMap, typeof(Map), true);
         
+        if (targetMap != null && targetMap.mapData != null)
+        {
+            EditorGUI.BeginChangeCheck();
+            int newMaxUnits = EditorGUILayout.IntField("Max Deployable Units", targetMap.mapData.maxDeployableUnits);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(targetMap.mapData, "Change Max Deployable Units");
+                targetMap.mapData.maxDeployableUnits = newMaxUnits;
+                EditorUtility.SetDirty(targetMap.mapData);
+            }
+        }
+        
         EditorGUILayout.Space(5);
         currentMode = (EditMode)EditorGUILayout.EnumPopup("Edit Mode", currentMode);
 

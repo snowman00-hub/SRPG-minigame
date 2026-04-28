@@ -122,6 +122,7 @@ public class UnitDataEditorWindow : EditorWindow
 
         EditorGUILayout.BeginHorizontal();
         DrawTableHeader("유닛 이름", 120);
+        DrawTableHeader("아이콘", 50);
         DrawTableHeader("체력", 45); DrawTableHeader("체력성장", 55);
         DrawTableHeader("공격", 45); DrawTableHeader("공격성장", 55);
         DrawTableHeader("방어", 45); DrawTableHeader("방어성장", 55);
@@ -141,6 +142,7 @@ public class UnitDataEditorWindow : EditorWindow
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField(data.name, GUILayout.Width(120));
+            data.unitIcon = (Sprite)EditorGUILayout.ObjectField(data.unitIcon, typeof(Sprite), false, GUILayout.Width(50));
             
             // HP
             data.hpRatio = EditorGUILayout.FloatField(data.hpRatio, GUILayout.Width(45));
