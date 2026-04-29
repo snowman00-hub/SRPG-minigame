@@ -9,6 +9,8 @@ public class Tile : MonoBehaviour
 
     [Header("Status")]
     public bool isWalkable = true;
+    public bool isSpawnPoint = false;
+    public Unit unitOnTile; // 현재 타일 위에 있는 유닛
 
     public void Setup(int x, int z, int height, bool isWalkable = true)
     {

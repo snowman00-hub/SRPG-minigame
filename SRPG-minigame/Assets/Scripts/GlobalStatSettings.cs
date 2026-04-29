@@ -23,6 +23,9 @@ public class GlobalStatSettings : ScriptableObject
     public int defaultMaxEnergy = 3;
     public int defaultJumpHeight = 1;
 
+    [Header("Unit Management")]
+    public System.Collections.Generic.List<UnitData> allUnitTemplates;
+
     // 싱글톤처럼 쉽게 접근하기 위한 유틸리티 (Resources 폴더 사용 권장)
     private static GlobalStatSettings instance;
     public static GlobalStatSettings Instance

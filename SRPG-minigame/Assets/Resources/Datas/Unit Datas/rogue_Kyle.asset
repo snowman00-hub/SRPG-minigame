@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed5cdc6b37d0c943847df5d7edf50e1, type: 3}
+  m_Name: rogue_Kyle
+  m_EditorClassIdentifier: Assembly-CSharp::UnitData
+  unitName: "\uCE74\uC77C"
+  description: "\uB3C4\uC801"
+  unitIcon: {fileID: 21300000, guid: 9cb4cce2f76e50c4fb90d0d252de38be, type: 2}
+  unitPortrait: {fileID: 21300000, guid: 64cfb5dd68f60894a8914e1ef008d9d8, type: 2}
+  unitPrefab: {fileID: 9149739273710752754, guid: 95fa489bf4f90f5498ede066b17bcc52, type: 3}
+  hpRatio: 0.8
+  atkRatio: 0.8
+  defRatio: 1
+  spdRatio: 1
+  matkRatio: 1
+  mdefRatio: 0.8
+  hpGrowthRatio: 0.8
+  atkGrowthRatio: 0.9
+  defGrowthRatio: 1
+  spdGrowthRatio: 1
+  matkGrowthRatio: 1
+  mdefGrowthRatio: 0.8
+  moveRange: 4
+  jumpHeight: 1
+  atkRange: 2
+  maxEnergy: 3
+  baseCritRate: 8
+  baseAccuracy: 90
+  baseEvasion: 10

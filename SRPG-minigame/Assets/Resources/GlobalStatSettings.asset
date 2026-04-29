@@ -26,3 +26,10 @@ MonoBehaviour:
   stdMagicDefenseGrowth: 2
   defaultMaxEnergy: 3
   defaultJumpHeight: 1
+  allUnitTemplates:
+  - {fileID: 11400000, guid: ad3bfd3ad02aae747bb2f4bd20afbae5, type: 2}
+  - {fileID: 11400000, guid: a807b958812454a4c9a2e9cc616fb8bc, type: 2}
+  - {fileID: 11400000, guid: d96d16f5e73716b4988181c95069bce1, type: 2}
+  - {fileID: 11400000, guid: e706d7927d7f07142839bc831c7fe1d7, type: 2}
+  - {fileID: 11400000, guid: d8f01286cf6e1054a8c957bd06033765, type: 2}
+  - {fileID: 11400000, guid: 4ab13394ecdc9944dbd607cee57a5e36, type: 2}

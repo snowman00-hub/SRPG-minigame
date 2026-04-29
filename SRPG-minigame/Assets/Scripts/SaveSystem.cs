@@ -46,14 +46,52 @@ public static class SaveSystem
     {
         if (!File.Exists(SavePath))
         {
-            Debug.LogWarning("Save file not found!");
-            return null;
+            Debug.Log("Save file not found. Generating default starting data.");
+            return GetDefaultSaveData();
         }
 
-        string json = File.ReadAllText(SavePath);
-        GameSaveData data = JsonUtility.FromJson<GameSaveData>(json);
-        Debug.Log("Game Loaded");
-        return data;
+        try
+        {
+            string json = File.ReadAllText(SavePath);
+            GameSaveData data = JsonUtility.FromJson<GameSaveData>(json);
+            
+            // 파일은 있는데 데이터가 비어있는 특수한 경우도 체크
+            if (data == null || data.unitList == null || data.unitList.Count == 0)
+            {
+                return GetDefaultSaveData();
+            }
+
+            Debug.Log("Game Loaded");
+            return data;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to load save: {e.Message}");
+            return GetDefaultSaveData();
+        }
+    }
+
+    private static GameSaveData GetDefaultSaveData()
+    {
+        GameSaveData defaultData = new GameSaveData();
+        
+        var global = GlobalStatSettings.Instance;
+        if (global != null && global.allUnitTemplates != null)
+        {
+            foreach (var template in global.allUnitTemplates)
+            {
+                if (template == null) continue;
+                defaultData.unitList.Add(new UnitSaveData
+                {
+                    unitName = template.unitName,
+                    unitDataName = template.name,
+                    level = 1,
+                    currentEXP = 0
+                });
+            }
+        }
+
+        return defaultData;
     }
 
     public static void DeleteSave()

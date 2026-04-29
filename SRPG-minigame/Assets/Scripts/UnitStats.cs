@@ -26,6 +26,13 @@ public class UnitStats
     public float accuracy;
     public float evasion;
 
+    // 계산 전용 정적 함수 (인스턴스 생성 없이 사용 가능)
+    public static int GetMaxHP(UnitData data, GlobalStatSettings global, int level)
+    {
+        if (data == null || global == null) return 0;
+        return Mathf.RoundToInt((global.stdMaxHP * data.hpRatio) + (global.stdHPGrowth * data.hpGrowthRatio * (level - 1)));
+    }
+
     private UnitData data;
     private GlobalStatSettings global;
 
