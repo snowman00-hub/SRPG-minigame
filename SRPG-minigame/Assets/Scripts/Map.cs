@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -60,22 +61,14 @@ public class Map : MonoBehaviour
             return;
         }
 
-        // 1. 유닛 데이터 캐시 생성 (SO 에셋 찾기 용도)
-        Dictionary<string, UnitData> unitDataCache = new Dictionary<string, UnitData>();
-        if (GlobalStatSettings.Instance != null && GlobalStatSettings.Instance.allUnitTemplates != null)
-        {
-            foreach (var template in GlobalStatSettings.Instance.allUnitTemplates)
-            {
-                if (template != null) unitDataCache[template.name] = template;
-            }
-        }
-
-
         // 3. 기존 소환된 유닛 제거
         foreach (var u in spawnedPlayerUnits) 
         {
             if (u != null)
             {
+                Tile tile = GetTile(u.x, u.z);
+                if (tile != null && tile.unitOnTile == u) tile.unitOnTile = null;
+
                 if (Application.isPlaying) Destroy(u.gameObject);
                 else DestroyImmediate(u.gameObject);
             }
@@ -107,7 +100,10 @@ public class Map : MonoBehaviour
         for (int i = 0; i < deployCount && i < spawnPointCount; i++)
         {
             var saveData = deploymentList[i];
-            if (unitDataCache.TryGetValue(saveData.unitDataName, out UnitData data))
+            string targetID = saveData.unitDataID;
+            UnitData data = GlobalStatSettings.Instance.GetUnitData(targetID);
+            
+            if (data != null)
             {
                 Vector2Int spawnPos = mapData.playerSpawnPoints[i];
                 Tile tile = GetTile(spawnPos.x, spawnPos.y); 
@@ -127,15 +123,70 @@ public class Map : MonoBehaviour
                 {
                     unit.team = Team.Player;
                     unit.ApplySaveData(saveData, data);
+                    // SetPosition 내부에서 타일 정보 자동 갱신
                     unit.SetPosition(spawnPos.x, spawnPos.y, this);
                     
-                    tile.unitOnTile = unit;
                     spawnedPlayerUnits.Add(unit);
                 }
             }
         }
 
         Debug.Log($"Map: {spawnedPlayerUnits.Count}명의 유닛을 자동으로 배치했습니다.");
+    }
+
+    // 개별 유닛 스폰 (런타임 로스터 UI 조작용 최적화)
+    public void SpawnUnit(UnitSaveData saveData)
+    {
+        if (playerUnitBasePrefab == null || mapData == null) return;
+        
+        string targetID = saveData.unitDataID;
+        UnitData data = GlobalStatSettings.Instance.GetUnitData(targetID);
+        if (data == null) return;
+
+        // 이미 스폰되어 있는지 확인
+        if (spawnedPlayerUnits.Any(u => u != null && u.unitData == data)) return;
+
+        for (int i = 0; i < mapData.playerSpawnPoints.Count; i++)
+        {
+            Vector2Int spawnPos = mapData.playerSpawnPoints[i];
+            Tile tile = GetTile(spawnPos.x, spawnPos.y);
+            // 비어있는 스폰 포인트 찾기
+            if (tile != null && tile.unitOnTile == null)
+            {
+                GameObject unitGo = Instantiate(playerUnitBasePrefab);
+                unitGo.name = $"Player_{data.unitName}";
+                Unit unit = unitGo.GetComponent<Unit>();
+                
+                if (unit != null)
+                {
+                    unit.team = Team.Player;
+                    unit.ApplySaveData(saveData, data);
+                    unit.SetPosition(spawnPos.x, spawnPos.y, this);
+                    spawnedPlayerUnits.Add(unit);
+                }
+                break; // 한 명 배치 후 종료
+            }
+        }
+    }
+
+    // 개별 유닛 제거 (런타임 로스터 UI 조작용 최적화)
+    public void RemoveUnit(UnitSaveData saveData)
+    {
+        string targetID = saveData.unitDataID;
+        UnitData data = GlobalStatSettings.Instance.GetUnitData(targetID);
+        if (data == null) return;
+
+        Unit unitToRemove = spawnedPlayerUnits.FirstOrDefault(u => u != null && u.unitData == data);
+        if (unitToRemove != null)
+        {
+            // 논리적 위치 비우기
+            Tile tile = GetTile(unitToRemove.x, unitToRemove.z);
+            if (tile != null && tile.unitOnTile == unitToRemove) tile.unitOnTile = null;
+
+            spawnedPlayerUnits.Remove(unitToRemove);
+            if (Application.isPlaying) Destroy(unitToRemove.gameObject);
+            else DestroyImmediate(unitToRemove.gameObject);
+        }
     }
 
     public void RebuildTilesArray()

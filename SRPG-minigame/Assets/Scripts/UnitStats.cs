@@ -42,12 +42,8 @@ public class UnitStats
         global = globalSettings;
         level = startLevel;
         
-        // 경험치 통 계산
-        maxEXP = 100;
-        for (int i = 1; i < level; i++)
-        {
-            maxEXP = (int)(maxEXP * 1.2f);
-        }
+        // 경험치 통 계산 (루프 없이 지수 함수 사용)
+        maxEXP = (int)(100 * Mathf.Pow(1.2f, level - 1));
 
         RecalculateStats();
         currentHP = maxHP;
@@ -58,8 +54,8 @@ public class UnitStats
     {
         if (data == null || global == null) return;
 
-        // 최종 스탯 = (글로벌 표준 * 유닛 계수) + (글로벌 성장 * 유닛 성장 계수 * (레벨 - 1))
-        maxHP = Mathf.RoundToInt((global.stdMaxHP * data.hpRatio) + (global.stdHPGrowth * data.hpGrowthRatio * (level - 1)));
+        // GetMaxHP 함수 재사용 (수식 파편화 방지)
+        maxHP = GetMaxHP(data, global, level);
         attack = Mathf.RoundToInt((global.stdAttack * data.atkRatio) + (global.stdAttackGrowth * data.atkGrowthRatio * (level - 1)));
         defense = Mathf.RoundToInt((global.stdDefense * data.defRatio) + (global.stdDefenseGrowth * data.defGrowthRatio * (level - 1)));
         speed = Mathf.RoundToInt((global.stdSpeed * data.spdRatio) + (global.stdSpeedGrowth * data.spdGrowthRatio * (level - 1)));
@@ -89,7 +85,7 @@ public class UnitStats
     {
         currentEXP -= maxEXP;
         level++;
-        maxEXP = (int)(maxEXP * 1.2f);
+        maxEXP = (int)(100 * Mathf.Pow(1.2f, level - 1));
         
         int oldMaxHP = maxHP;
         RecalculateStats();

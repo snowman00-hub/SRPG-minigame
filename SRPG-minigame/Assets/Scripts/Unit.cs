@@ -66,14 +66,24 @@ public class Unit : MonoBehaviour
     // 유닛을 그리드 좌표에 즉시 배치합니다.
     public void SetPosition(int targetX, int targetZ, Map map)
     {
+        // 1. 기존에 서 있던 타일이 있다면 비워줍니다 (Desync 방지)
+        Tile currentTile = map.GetTile(x, z);
+        if (currentTile != null && currentTile.unitOnTile == this)
+        {
+            currentTile.unitOnTile = null;
+        }
+
         x = targetX;
         z = targetZ;
 
-        Tile tile = map.GetTile(x, z);
-        if (tile != null)
+        // 2. 새 타일에 자신을 등록합니다.
+        Tile newTile = map.GetTile(x, z);
+        if (newTile != null)
         {
+            newTile.unitOnTile = this;
+            
             // 타일의 높이(y)를 기준으로 유닛을 살짝 위에 띄웁니다.
-            float yPos = tile.transform.position.y + 0.5f; 
+            float yPos = newTile.transform.position.y + 0.5f; 
             transform.position = new Vector3(x * map.spacing, yPos, z * map.spacing);
         }
     }

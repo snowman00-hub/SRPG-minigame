@@ -23,7 +23,6 @@ public class RosterUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI deployCountText; // 출격 유닛 7/7 표시용
 
     private List<UnitSaveData> currentUnitSaves = new List<UnitSaveData>();
-    private Dictionary<string, UnitData> unitDataCache = new Dictionary<string, UnitData>();
 
     // --- 캐싱 및 인풋 ---
     private Map map; // Start에서 캐싱하여 직접 사용
@@ -86,21 +85,13 @@ public class RosterUIManager : MonoBehaviour
 
     private void RefreshRoster()
     {
-        if (unitDataCache.Count == 0)
-        {
-            var global = GlobalStatSettings.Instance;
-            if (global != null && global.allUnitTemplates != null)
-            {
-                foreach (var t in global.allUnitTemplates) unitDataCache[t.name] = t;
-            }
-        }
-
         for (int i = 0; i < existingSlots.Length; i++)
         {
             if (i < currentUnitSaves.Count)
             {
                 UnitSaveData saveData = currentUnitSaves[i];
-                unitDataCache.TryGetValue(saveData.unitDataName, out UnitData data);
+                string targetID = saveData.unitDataID;
+                UnitData data = GlobalStatSettings.Instance.GetUnitData(targetID);
                 
                 RosterUnitSlot slot = existingSlots[i];
                 slot.Setup(data, saveData, (clickedData) => SelectUnit(clickedData, saveData, slot));
@@ -108,7 +99,7 @@ public class RosterUIManager : MonoBehaviour
 
                 if (map != null)
                 {
-                    bool isDeployed = map.deploymentList.Any(d => d.unitDataName == saveData.unitDataName);
+                    bool isDeployed = map.deploymentList.Any(d => d.unitDataID == targetID);
                     slot.SetHighlight(isDeployed);
                 }
 
@@ -139,12 +130,14 @@ public class RosterUIManager : MonoBehaviour
     {
         if (map == null) return;
 
-        var existing = map.deploymentList.FirstOrDefault(d => d.unitDataName == saveData.unitDataName);
+        string targetID = saveData.unitDataID;
+        var existing = map.deploymentList.FirstOrDefault(d => d.unitDataID == targetID);
 
         if (existing != null)
         {
             map.deploymentList.Remove(existing);
             slot.SetHighlight(false);
+            if (Application.isPlaying) map.RemoveUnit(existing); // 추가된 로직: 해당 유닛만 스마트하게 파괴
         }
         else
         {
@@ -152,6 +145,7 @@ public class RosterUIManager : MonoBehaviour
             {
                 map.deploymentList.Add(saveData);
                 slot.SetHighlight(true);
+                if (Application.isPlaying) map.SpawnUnit(saveData); // 추가된 로직: 해당 유닛만 스마트하게 스폰
             }
             else
             {
@@ -159,7 +153,7 @@ public class RosterUIManager : MonoBehaviour
             }
         }
         
-        map.SpawnInitialUnits();
+        if (!Application.isPlaying) map.SpawnInitialUnits(); // 에디터 테스트용만 전체 리셋 유지
         UpdateDeployCountText();
     }
 

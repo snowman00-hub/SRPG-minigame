@@ -6,7 +6,7 @@ using UnityEngine;
 public class UnitSaveData
 {
     public string unitName;
-    public string unitDataName; // ScriptableObject를 찾기 위한 이름
+    public string unitDataID; // ScriptableObject를 찾기 위한 고유 ID
     public int level;
     public int currentEXP;
 }
@@ -30,7 +30,7 @@ public static class SaveSystem
             UnitSaveData usd = new UnitSaveData
             {
                 unitName = unit.unitName,
-                unitDataName = unit.unitData != null ? unit.unitData.name : "",
+                unitDataID = unit.unitData != null ? unit.unitData.UnitID : "",
                 level = unit.stats.level,
                 currentEXP = unit.stats.currentEXP
             };
@@ -84,7 +84,7 @@ public static class SaveSystem
                 defaultData.unitList.Add(new UnitSaveData
                 {
                     unitName = template.unitName,
-                    unitDataName = template.name,
+                    unitDataID = template.UnitID,
                     level = 1,
                     currentEXP = 0
                 });

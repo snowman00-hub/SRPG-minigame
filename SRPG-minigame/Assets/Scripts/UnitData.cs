@@ -4,6 +4,15 @@ using UnityEngine;
 public class UnitData : ScriptableObject
 {
     [Header("Basic Information")]
+    [SerializeField] private string unitID; // 고유 ID (Save 데이터 연동용)
+    public string UnitID 
+    {
+        get 
+        {
+            if (string.IsNullOrEmpty(unitID)) return this.name; // ID가 비어있다면 파일명 사용 (호환성)
+            return unitID;
+        }
+    }
     public string unitName;
     public string description;
     public Sprite unitIcon;
