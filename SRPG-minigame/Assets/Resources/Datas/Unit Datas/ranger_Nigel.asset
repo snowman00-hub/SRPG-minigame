@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed5cdc6b37d0c943847df5d7edf50e1, type: 3}
   m_Name: ranger_Nigel
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
+  unitID: Nigel
   unitName: "\uB098\uC774\uC824"
   description: "\uB808\uC778\uC800"
   unitIcon: {fileID: 21300000, guid: 55a5211a65e26904ebf703a8fc11c6e0, type: 2}

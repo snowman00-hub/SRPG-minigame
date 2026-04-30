@@ -26,7 +26,7 @@ public class Map : MonoBehaviour
     public List<UnitSaveData> deploymentList = new List<UnitSaveData>(); // 현재 출전 확정된 명단 (임시)
 
     public Tile[,] Tiles { get; private set; }
-    private List<GameObject> activeMarkers = new List<GameObject>(); // 현재 활성화된 마커들
+    private Dictionary<Vector2Int, SpawnMarker> activeMarkers = new Dictionary<Vector2Int, SpawnMarker>(); // 현재 활성화된 마커들
     private bool isInitialDeploymentDone = false; // 처음에 한 번 채웠는지 체크용
 
     private void Awake()
@@ -274,11 +274,18 @@ public class Map : MonoBehaviour
             Tile tile = GetTile(spawnPos.x, spawnPos.y);
             if (tile != null)
             {
+                tile.isSpawnPoint = true;
                 // 타일 윗면에 배치
                 Vector3 pos = tile.transform.position + Vector3.up * 0.53f; 
-                GameObject marker = InstantiateObject(spawnMarkerPrefab, pos, Quaternion.Euler(90, 0, 0), transform);
-                marker.name = $"SpawnMarker_{spawnPos.x}_{spawnPos.y}";
-                activeMarkers.Add(marker);
+                GameObject markerObj = InstantiateObject(spawnMarkerPrefab, pos, Quaternion.Euler(90, 0, 0), transform);
+                markerObj.name = $"SpawnMarker_{spawnPos.x}_{spawnPos.y}";
+                
+                SpawnMarker marker = markerObj.GetComponent<SpawnMarker>();
+                if (marker != null)
+                {
+                    activeMarkers.Add(spawnPos, marker);
+                    marker.SetHighlight(false); // 초기 상태는 일반
+                }
             }
         }
     }
@@ -286,11 +293,24 @@ public class Map : MonoBehaviour
     // 마커들을 모두 제거합니다.
     public void ClearMarkers()
     {
-        foreach (var marker in activeMarkers)
+        foreach (var kvp in activeMarkers)
         {
-            if (marker != null) DestroyImmediate(marker);
+            if (kvp.Value != null) 
+            {
+                if (Application.isPlaying) Destroy(kvp.Value.gameObject);
+                else DestroyImmediate(kvp.Value.gameObject);
+            }
         }
         activeMarkers.Clear();
+
+        // 모든 타일의 스폰 포인트 상태 리셋
+        if (Tiles != null)
+        {
+            foreach (var tile in Tiles)
+            {
+                if (tile != null) tile.isSpawnPoint = false;
+            }
+        }
         
         // 이름으로도 한 번 더 체크해서 청소 (에디터용)
         for (int i = transform.childCount - 1; i >= 0; i--)
@@ -299,6 +319,16 @@ public class Map : MonoBehaviour
             {
                 DestroyImmediate(transform.GetChild(i).gameObject);
             }
+        }
+    }
+
+    // 특정 좌표에 있는 스폰 마커의 하이라이트(선택됨 표시)를 설정합니다.
+    public void SetMarkerHighlight(int x, int z, bool isSelected)
+    {
+        Vector2Int pos = new Vector2Int(x, z);
+        if (activeMarkers.ContainsKey(pos))
+        {
+            activeMarkers[pos].SetHighlight(isSelected);
         }
     }
 

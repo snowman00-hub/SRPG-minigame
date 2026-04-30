@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed5cdc6b37d0c943847df5d7edf50e1, type: 3}
   m_Name: druid_Orwen
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
+  unitID: Orwen
   unitName: "\uC624\uB974\uC6EC"
   description: "\uB4DC\uB8E8\uC774\uB4DC"
   unitIcon: {fileID: 21300000, guid: 297ad002b94b0454494ce3dc3a0129ef, type: 2}

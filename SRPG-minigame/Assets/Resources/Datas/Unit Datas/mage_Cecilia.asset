@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed5cdc6b37d0c943847df5d7edf50e1, type: 3}
   m_Name: mage_Cecilia
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
+  unitID: Cecilia
   unitName: "\uC138\uC2E4\uB9AC\uC544"
   description: "\uB9C8\uBC95\uC0AC"
   unitIcon: {fileID: 21300000, guid: da4a410373dc09540a0bb56b1cf42712, type: 2}

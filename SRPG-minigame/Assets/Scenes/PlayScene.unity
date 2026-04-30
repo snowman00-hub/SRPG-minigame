@@ -735,6 +735,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1653649203}
     m_Modifications:
+    - target: {fileID: 6266795869570516026, guid: 3652619eb2186b94ea475b8e1571a25a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fb23db8bbc6920d428f742df4ee0cfc6, type: 2}
     - target: {fileID: 6549121341773022912, guid: 3652619eb2186b94ea475b8e1571a25a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7398,6 +7402,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1734302995}
   m_CullTransparentMesh: 1
+--- !u!1 &1737323115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1737323118}
+  - component: {fileID: 1737323117}
+  - component: {fileID: 1737323116}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1737323116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737323115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad86444ae285ee04ab805816eb546fbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridPlacementSystem
+  map: {fileID: 1653649202}
+  cursorVisual: {fileID: 0}
+  moveDelay: 0.15
+--- !u!114 &1737323117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737323115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4978611f82842d04b806a871ac44c1c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattlePrepManager
+  map: {fileID: 1653649202}
+  gridPlacement: {fileID: 1737323116}
+  placementButton: {fileID: 2015983723}
+  startButton: {fileID: 4118754091040949032}
+--- !u!4 &1737323118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737323115}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1748598753 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6632808147613616488, guid: cc882c3ef8cd7bd42b5a969fa1e220b7, type: 3}
@@ -8504,6 +8572,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4210392962771871487, guid: 2120544f0bbbd5945916bdb76be9fcfb, type: 3}
   m_PrefabInstance: {fileID: 696508655}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2015983723 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 574020587566338661, guid: bbdd655c559554c43b0842c211ea6634, type: 3}
+  m_PrefabInstance: {fileID: 468854469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2016031540
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9969,6 +10048,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6170149352559904836, guid: bbdd655c559554c43b0842c211ea6634, type: 3}
   m_PrefabInstance: {fileID: 4118754091040949030}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4118754091040949032 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 574020587566338661, guid: bbdd655c559554c43b0842c211ea6634, type: 3}
+  m_PrefabInstance: {fileID: 4118754091040949030}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -9978,3 +10068,4 @@ SceneRoots:
   - {fileID: 1653649203}
   - {fileID: 840959099}
   - {fileID: 1008483043}
+  - {fileID: 1737323118}

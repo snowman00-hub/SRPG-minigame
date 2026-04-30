@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6549121341773022912}
   - component: {fileID: 7481309391881344601}
   - component: {fileID: 6266795869570516026}
+  - component: {fileID: -4866601902901120923}
   m_Layer: 0
   m_Name: SpawnPointMarker
   m_TagString: Untagged
@@ -90,3 +91,18 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-4866601902901120923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6790516965896317018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad6e4728849c2347ab62c36431c0cc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnMarker
+  markerRenderer: {fileID: 6266795869570516026}
+  normalMaterial: {fileID: 2100000, guid: fb23db8bbc6920d428f742df4ee0cfc6, type: 2}
+  selectedMaterial: {fileID: 2100000, guid: 4545e84050f6fc24fa86f0bb70288f50, type: 2}

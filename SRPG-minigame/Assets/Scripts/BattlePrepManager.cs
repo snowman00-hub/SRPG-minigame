@@ -1,60 +1,53 @@
 using UnityEngine;
-using UnityEngine.UIElements;
-using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class BattlePrepManager : MonoBehaviour
 {
     [Header("References")]
-    public UIDocument uiDocument;
     public Map map;
+    public GridPlacementSystem gridPlacement;
 
-    private VisualElement selectionPanel;
-    private Button btnMembers;
-    private Button btnPlacement;
-    private Button btnStart;
+    [Header("UI Buttons")]
+    public Button placementButton; // '배치 모드' 버튼
+    public Button startButton;     // '전투 시작' 버튼
 
-    void OnEnable()
+    private bool isPlacementMode = false;
+
+    private void Start()
     {
-        if (uiDocument == null) uiDocument = GetComponent<UIDocument>();
-        if (uiDocument == null) return;
+        // 버튼 이벤트 연결
+        if (placementButton != null)
+            placementButton.onClick.AddListener(TogglePlacementMode);
 
-        var root = uiDocument.rootVisualElement;
-        
-        // UI 요소 찾기
-        selectionPanel = root.Q<VisualElement>("selection-panel");
-        btnMembers = root.Q<Button>("btn-members");
-        btnPlacement = root.Q<Button>("btn-placement");
-        btnStart = root.Q<Button>("btn-start");
-
-        // 이벤트 연결
-        btnMembers.clicked += OnMembersClicked;
-        btnPlacement.clicked += OnPlacementClicked;
-        btnStart.clicked += OnStartClicked;
+        if (startButton != null)
+            startButton.onClick.AddListener(OnStartClicked);
     }
 
-    private void OnMembersClicked()
+    public void TogglePlacementMode()
     {
-        if (selectionPanel == null) return;
-        
-        bool isHidden = selectionPanel.ClassListContains("hidden");
-        if (isHidden) selectionPanel.RemoveFromClassList("hidden");
-        else selectionPanel.AddToClassList("hidden");
-        
-        Debug.Log("출전 멤버 선택창 토글");
-    }
+        isPlacementMode = !isPlacementMode;
+        Debug.Log($"배치 모드 {(isPlacementMode ? "활성화" : "비활성화")}");
 
-    private void OnPlacementClicked()
-    {
-        Debug.Log("배치 모드 활성화: 스폰 마커를 표시합니다.");
-        if (map != null) map.ShowSpawnMarkers();
+        if (map != null)
+        {
+            if (isPlacementMode) map.ShowSpawnMarkers();
+            else map.ClearMarkers();
+        }
+
+        if (gridPlacement != null)
+        {
+            gridPlacement.SetActive(isPlacementMode);
+        }
     }
 
     private void OnStartClicked()
     {
-        Debug.Log("전투 시작! 모든 마커를 제거하고 게임 루프로 진입합니다.");
+        Debug.Log("전투 시작! 모든 마커와 커서를 정리합니다.");
+        isPlacementMode = false;
+
         if (map != null) map.ClearMarkers();
-        
-        // 여기서 실제 전투 시퀀스나 턴 매니저를 실행할 수 있습니다.
-        if (selectionPanel != null) selectionPanel.AddToClassList("hidden");
+        if (gridPlacement != null) gridPlacement.SetActive(false);
+
+        // 이후 실제 전투 시작 로직을 여기에 추가하시면 됩니다.
     }
 }

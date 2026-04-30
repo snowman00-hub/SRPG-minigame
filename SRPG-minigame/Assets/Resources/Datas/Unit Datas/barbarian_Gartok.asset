@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed5cdc6b37d0c943847df5d7edf50e1, type: 3}
   m_Name: barbarian_Gartok
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
+  unitID: Gartok
   unitName: "\uAC00\uB974\uD1A0\uD06C"
   description: "\uBC14\uBC14\uB9AC\uC548"
   unitIcon: {fileID: 21300000, guid: c1b4c59ba4f9ae34f8d33d1cc7490f62, type: 2}
